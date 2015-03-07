@@ -1,0 +1,17 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\WorldPos.cs">
+    <Files>
+      <File FileName="Assets\Scripts\Chunk.cs" Line="80" Column="32" />
+      <File FileName="Assets\Scripts\BlockAir.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Block.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\BlockGrass.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\MeshData.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\WorldPos.cs" Line="20" Column="25" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
