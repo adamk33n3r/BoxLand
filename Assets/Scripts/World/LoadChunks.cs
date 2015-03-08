@@ -6,6 +6,7 @@ public class LoadChunks : MonoBehaviour {
 
     public World world;
     int timer = 0;
+    int chunksToLoadPerFrame = 4;
 
     List<WorldPos> updateList = new List<WorldPos>();
     List<WorldPos> buildList = new List<WorldPos>();
@@ -52,13 +53,13 @@ public class LoadChunks : MonoBehaviour {
         new WorldPos(5, 0, 6), new WorldPos(6, 0, -5), new WorldPos(6, 0, 5) };
 
     // Update is called once per frame
-    void Update () {
+    void Update() {
         DeleteChunks();
         FindChunksToLoad();
         LoadAndRenderChunks();
     }
 
-    void FindChunksToLoad () {
+    void FindChunksToLoad() {
         //Get the position of this gameobject to generate around
         WorldPos playerPos = new WorldPos(
             Mathf.FloorToInt(transform.position.x / Chunk.chunkSize) * Chunk.chunkSize,
@@ -97,7 +98,7 @@ public class LoadChunks : MonoBehaviour {
         }
     }
 
-    void BuildChunk (WorldPos pos) {
+    void BuildChunk(WorldPos pos) {
         for (int y = pos.y - Chunk.chunkSize; y <= pos.y + Chunk.chunkSize; y += Chunk.chunkSize) {
             if (y > 64 || y < -64)
                 continue;
@@ -113,8 +114,8 @@ public class LoadChunks : MonoBehaviour {
         updateList.Add(pos);
     }
 
-    void LoadAndRenderChunks () {
-        for (int i = 0; i < 8; i++) {
+    void LoadAndRenderChunks() {
+        for (int i = 0; i < chunksToLoadPerFrame; i++) {
             if (buildList.Count != 0) {
                 BuildChunk(buildList[0]);
                 buildList.RemoveAt(0);
@@ -129,7 +130,7 @@ public class LoadChunks : MonoBehaviour {
         }
     }
 
-    void DeleteChunks () {
+    void DeleteChunks() {
         
         if (timer == 10) {
             var chunksToDelete = new List<WorldPos>();

@@ -15,8 +15,8 @@ public class TerrainGen {
     float dirtBaseHeight = 1;
     float dirtNoise = 0.04f;
     float dirtNoiseHeight = 9;
-    
-    public Chunk ChunkGen (Chunk chunk) {
+
+    public Chunk ChunkGen(Chunk chunk) {
         for (int x = chunk.pos.x; x < chunk.pos.x + Chunk.chunkSize; x++) {
             for (int z = chunk.pos.z; z < chunk.pos.z + Chunk.chunkSize; z++) {
                 chunk = ChunkColumnGen(chunk, x, z);
@@ -25,7 +25,7 @@ public class TerrainGen {
         return chunk;
     }
     
-    public Chunk ChunkColumnGen (Chunk chunk, int x, int z) {
+    public Chunk ChunkColumnGen(Chunk chunk, int x, int z) {
         int stoneHeight = Mathf.FloorToInt(stoneBaseHeight);
         stoneHeight += GetNoise(x, 0, z, stoneMountainFrequency, Mathf.FloorToInt(stoneMountainHeight));
         
@@ -51,7 +51,7 @@ public class TerrainGen {
         return chunk;
     }
     
-    public static int GetNoise (int x, int y, int z, float scale, int max) {
+    public static int GetNoise(int x, int y, int z, float scale, int max) {
         return Mathf.FloorToInt((Noise.Generate(x * scale, y * scale, z * scale) + 1f) * (max / 2f));
     }
 }

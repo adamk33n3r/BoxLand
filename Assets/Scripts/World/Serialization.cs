@@ -8,19 +8,19 @@ using System.Runtime.Serialization;
 public static class Serialization {
     public static string saveFolderName = "voxelGameSaves";
 
-    public static string SaveLocation (string worldName) {
+    public static string SaveLocation(string worldName) {
         string saveLocation = saveFolderName + "/" + worldName + "/";
         if (!Directory.Exists(saveLocation))
             Directory.CreateDirectory(saveLocation);
         return saveLocation;
     }
 
-    public static string FileName (WorldPos chunkLocation) {
+    public static string FileName(WorldPos chunkLocation) {
         string fileName = chunkLocation.x + "," + chunkLocation.y + "," + chunkLocation.z + ".bin";
         return fileName;
     }
 
-    public static void SaveChunk (Chunk chunk) {
+    public static void SaveChunk(Chunk chunk) {
         Save save = new Save(chunk);
         // If there aren't any modified blocks don't save anything
         if (save.blocks.Count == 0)
@@ -34,7 +34,7 @@ public static class Serialization {
         stream.Close();
     }
 
-    public static bool Load (Chunk chunk) {
+    public static bool Load(Chunk chunk) {
         string saveFile = SaveLocation(chunk.world.worldName);
         saveFile += FileName(chunk.pos);
         

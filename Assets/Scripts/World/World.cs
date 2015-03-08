@@ -23,7 +23,7 @@ public class World : MonoBehaviour {
 //        }
 //    }
 
-    public void CreateChunk (int x, int y, int z) {
+    public void CreateChunk(int x, int y, int z) {
         WorldPos worldPos = new WorldPos(x, y, z);
 
         // Instantiate a new chunk from prefab
@@ -55,10 +55,11 @@ public class World : MonoBehaviour {
         newChunk = terrainGen.ChunkGen(newChunk);
 
         newChunk.SetBlocksUnmodified();
-        bool loaded = Serialization.Load(newChunk);
+        if (Application.platform != RuntimePlatform.WindowsWebPlayer && Application.platform != RuntimePlatform.OSXWebPlayer && Application.platform != RuntimePlatform.WebGLPlayer)
+            Serialization.Load(newChunk);
     }
 
-    public void DestroyChunk (int x, int y, int z) {
+    public void DestroyChunk(int x, int y, int z) {
         Chunk chunk = null;
         if (chunks.TryGetValue(new WorldPos(x, y, z), out chunk)) {
             Serialization.SaveChunk(chunk);
@@ -67,7 +68,7 @@ public class World : MonoBehaviour {
         }
     }
 
-    public Chunk GetChunk (int x, int y, int z) {
+    public Chunk GetChunk(int x, int y, int z) {
         WorldPos pos = new WorldPos(x, y, z);
         float multiple = Chunk.chunkSize;
         pos.x = Mathf.FloorToInt(x / multiple) * Chunk.chunkSize;
@@ -79,19 +80,20 @@ public class World : MonoBehaviour {
         return containerChunk;
     }
 
-    public Block GetBlock (int x, int y, int z) {
+    public Block GetBlock(int x, int y, int z) {
         Chunk containerChunk = GetChunk(x, y, z);
 
-        if (containerChunk != null)
+        if (containerChunk != null) {
             return containerChunk.GetBlock(
                 x - containerChunk.pos.x,
                 y - containerChunk.pos.y,
                 z - containerChunk.pos.z);
-        else
+        } else {
             return new BlockAir();
+        }
     }
 
-    public void SetBlock (int x, int y, int z, Block block) {
+    public void SetBlock(int x, int y, int z, Block block) {
         Chunk chunk = GetChunk(x, y, z);
         
         if (chunk != null) {
@@ -108,11 +110,12 @@ public class World : MonoBehaviour {
         }
     }
 
-    void UpdateIfEqual (int value1, int value2, WorldPos pos) {
+    void UpdateIfEqual(int value1, int value2, WorldPos pos) {
         if (value1 == value2) {
             Chunk chunk = GetChunk(pos.x, pos.y, pos.z);
-            if (chunk != null)
+            if (chunk != null) {
                 chunk.update = true;
+            }
         }
     }
 }
