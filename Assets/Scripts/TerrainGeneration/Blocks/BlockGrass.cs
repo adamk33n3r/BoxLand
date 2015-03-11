@@ -4,11 +4,11 @@ using System;
 
 [Serializable]
 public class BlockGrass : Block {
-    public BlockGrass () : base() {
+    public BlockGrass() : base() {
 
     }
 
-    public override Tile TexturePosition (Direction direction) {
+    public override Tile TexturePosition(Direction direction) {
         Tile tile = new Tile();
 
         switch (direction) {

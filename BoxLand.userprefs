@@ -1,14 +1,17 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\World\LoadChunks.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\TerrainGeneration\BackgroundGenerator.cs">
     <Files>
-      <File FileName="Assets\Scripts\World\LoadChunks.cs" Line="17" Column="28" />
-      <File FileName="Assets\Scripts\World\World.cs" Line="97" Column="41" />
-      <File FileName="Assets\Scripts\Modify.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\World\Chunk.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\World\SunFollow.cs" Line="1" Column="1" />
-      <File FileName="Assets\Standard Assets\Character Controllers\Sources\Scripts\ThirdPersonController.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\World\Terrain\TerrainGen.cs" Line="19" Column="1" />
+      <File FileName="Assets\Scripts\TerrainGeneration\Chunk.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Legacy\World.cs" Line="8" Column="31" />
+      <File FileName="Assets\Scripts\TerrainGeneration\World.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Legacy\LoadChunks.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Legacy\Chunk.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\TerrainGeneration\ChunkLoader.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\TerrainGeneration\Threading\BackgroundThread.cs" Line="20" Column="14" />
+      <File FileName="Assets\Scripts\TerrainGeneration\Threading\MultiThreadedChunkGen.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\TerrainGeneration\Threading\TestBGThread.cs" Line="12" Column="5" />
+      <File FileName="Assets\Scripts\TerrainGeneration\BackgroundGenerator.cs" Line="6" Column="26" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

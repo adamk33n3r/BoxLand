@@ -1,18 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 
 public class LoadChunks : MonoBehaviour {
 
     public World world;
     int timer = 0;
-    int chunksToLoadPerFrame = 4;
+    int chunksToLoadPerFrame = 1;
 
     List<WorldPos> updateList = new List<WorldPos>();
     List<WorldPos> buildList = new List<WorldPos>();
     // FIXME: This should be generated based on where you start. And also should be configurable how big it should be.
     // As of now it only generates like 16x16 around you.
-    static  WorldPos[] chunkPositions = {   new WorldPos(0, 0, 0), new WorldPos(-1, 0, 0), new WorldPos(0, 0, -1), new WorldPos(0, 0, 1), new WorldPos(1, 0, 0),
+    static  WorldPos[] chunkPositionsBig = {   new WorldPos(0, 0, 0), new WorldPos(-1, 0, 0), new WorldPos(0, 0, -1), new WorldPos(0, 0, 1), new WorldPos(1, 0, 0),
         new WorldPos(-1, 0, -1), new WorldPos(-1, 0, 1), new WorldPos(1, 0, -1), new WorldPos(1, 0, 1), new WorldPos(-2, 0, 0),
         new WorldPos(0, 0, -2), new WorldPos(0, 0, 2), new WorldPos(2, 0, 0), new WorldPos(-2, 0, -1), new WorldPos(-2, 0, 1),
         new WorldPos(-1, 0, -2), new WorldPos(-1, 0, 2), new WorldPos(1, 0, -2), new WorldPos(1, 0, 2), new WorldPos(2, 0, -1),
@@ -52,6 +53,13 @@ public class LoadChunks : MonoBehaviour {
         new WorldPos(-6, 0, -5), new WorldPos(-6, 0, 5), new WorldPos(-5, 0, -6), new WorldPos(-5, 0, 6), new WorldPos(5, 0, -6),
         new WorldPos(5, 0, 6), new WorldPos(6, 0, -5), new WorldPos(6, 0, 5) };
 
+    static  WorldPos[] chunkPositions = {
+        new WorldPos(0, 0, 0)
+    };
+
+    void Start() {
+    }
+
     // Update is called once per frame
     void Update() {
         DeleteChunks();
@@ -79,19 +87,20 @@ public class LoadChunks : MonoBehaviour {
                 );
                 
                 //Get the chunk in the defined position
-                Chunk newChunk = world.GetChunk(
-                    newChunkPos.x, newChunkPos.y, newChunkPos.z);
+                Chunk newChunk = world.GetChunk(newChunkPos.x, newChunkPos.y, newChunkPos.z);
                 
-                //If the chunk already exists and it's already
-                //rendered or in queue to be rendered continue
+                // If the chunk already exists and it's already
+                // rendered or in queue to be rendered continue
                 if (newChunk != null
                     && (newChunk.rendered || updateList.Contains(newChunkPos)))
                     continue;
                 
                 //load a column of chunks in this position
-                for (int y = -4; y < 4; y++) {
+                for (int y = 0; y < 1; y++) {
                     buildList.Add(new WorldPos(
-                        newChunkPos.x, y * Chunk.chunkSize, newChunkPos.z));
+                        newChunkPos.x,
+                        y * Chunk.chunkSize,
+                        newChunkPos.z));
                 }
                 return;
             }
@@ -102,11 +111,19 @@ public class LoadChunks : MonoBehaviour {
         for (int y = pos.y - Chunk.chunkSize; y <= pos.y + Chunk.chunkSize; y += Chunk.chunkSize) {
             if (y > 64 || y < -64)
                 continue;
+            if (y != 0)
+                continue;
             
             for (int x = pos.x - Chunk.chunkSize; x <= pos.x + Chunk.chunkSize; x += Chunk.chunkSize) {
                 for (int z = pos.z - Chunk.chunkSize; z <= pos.z + Chunk.chunkSize; z += Chunk.chunkSize) {
-                    if (world.GetChunk(x, y, z) == null)
-                        world.CreateChunk(x, y, z);
+                    
+                    if (y < 0) {
+                        if (world.GetChunk(x, -16, z) == null)
+                            world.CreateChunk(x, -16, z);
+                    } else {
+                        if (world.GetChunk(x, y, z) == null)
+                            world.CreateChunk(x, y, z);
+                    }
                 }
             }
         }
@@ -115,6 +132,8 @@ public class LoadChunks : MonoBehaviour {
     }
 
     void LoadAndRenderChunks() {
+        if (updateList.Count != 0)
+            Debug.Log(updateList.Count);
         for (int i = 0; i < chunksToLoadPerFrame; i++) {
             if (buildList.Count != 0) {
                 BuildChunk(buildList[0]);
@@ -125,7 +144,9 @@ public class LoadChunks : MonoBehaviour {
         for (int i = 0; i < updateList.Count; i++) {
             Chunk chunk = world.GetChunk(updateList[0].x, updateList[0].y, updateList[0].z);
             if (chunk != null)
-                chunk.update = true;
+                chunk.SetUpdate(true);
+            else
+                Debug.Log("loop updaet" + updateList.Count);
             updateList.RemoveAt(0);
         }
     }

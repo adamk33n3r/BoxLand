@@ -4,15 +4,15 @@ using SimplexNoise;
 
 public class TerrainGen {
 
-    float stoneBaseHeight = -24;
-    float stoneBaseNoise = 0.05f;
-    float stoneBaseNoiseHeight = 4;
+    float stoneBaseHeight = 0;              // Where to start
+    float stoneBaseNoise = 0.05f;           // Has to do with distance between peaks. .05 == 25 blocks
+    float stoneBaseNoiseHeight = 4;         // Difference between peak and valley
     
     float stoneMountainHeight = 48;
     float stoneMountainFrequency = 0.008f;
-    float stoneMinHeight = -12;
+    float stoneMinHeight = 0;             // The lowest stone is allowed to go.
     
-    float dirtBaseHeight = 1;
+    float dirtBaseHeight = 1;               // Minimum depth on top of rock
     float dirtNoise = 0.04f;
     float dirtNoiseHeight = 9;
 
@@ -25,7 +25,7 @@ public class TerrainGen {
         return chunk;
     }
     
-    public Chunk ChunkColumnGen(Chunk chunk, int x, int z) {
+    public virtual Chunk ChunkColumnGen(Chunk chunk, int x, int z) {
         int stoneHeight = Mathf.FloorToInt(stoneBaseHeight);
         stoneHeight += GetNoise(x, 0, z, stoneMountainFrequency, Mathf.FloorToInt(stoneMountainHeight));
         
