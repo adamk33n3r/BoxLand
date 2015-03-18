@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.ComponentModel;
 
@@ -11,7 +11,7 @@ public class MultiThreadedChunkGen {
     }
 
     public static void GenerateMesh() {
-        new BackgroundThread(generateMesh, generateMeshCallback).Start(null);
+        BackgroundSleeper.Go(null);
     }
 
     static void generateMesh(object sender, DoWorkEventArgs e) {

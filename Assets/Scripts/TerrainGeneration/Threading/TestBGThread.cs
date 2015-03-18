@@ -6,7 +6,7 @@ public class TestBGThread : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        new BackgroundThread(generateMesh, generateMeshCallback).Start(5);
+//        new BackgroundThread(generateMesh, generateMeshCallback).Start(5);
     }
     
     static void generateMesh(object sender, DoWorkEventArgs e) {

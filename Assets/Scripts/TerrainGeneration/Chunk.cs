@@ -8,33 +8,40 @@ public class Chunk : MonoBehaviour {
     public WorldPos pos;
     public Block[ , , ] blocks = new Block[chunkSize, chunkSize, chunkSize];
     public static int chunkSize = 16;
-    public bool rendered;
-    
-    ChunkObject chunkObj;
-    
-    public struct MeshObjects {
-        public MeshFilter filter;
-        public MeshCollider coll;
-        public MeshData meshData;
-        public Block[ , , ] blocks;
-        public Chunk chunk;
-    }
-    
-    public MeshObjects? meshToRender = null;
+    public bool rendered, update;
+
+    private MeshFilter filter;
+    private MeshCollider coll;
+
+    private BackgroundMeshBuilder thread;
 
     // Use this for initialization
     void Start() {
-	    
+        filter = gameObject.GetComponent<MeshFilter>();
+        coll = gameObject.GetComponent<MeshCollider>();
     }
 	
     // Update is called once per frame
     void Update() {
-	
-    }
-
-    public Chunk(ChunkObject chunkObject) {
-        chunkObj = chunkObject;
-        chunkObj.AttachChunk(this);
+        if (update) {
+            update = false;
+//            System.DateTime before = System.DateTime.Now;
+//            UpdateChunk();
+//            System.DateTime after = System.DateTime.Now;
+            if (thread != null)
+                thread.Abort();
+            thread = BackgroundMeshBuilder.Go(this);
+            return;
+//            System.TimeSpan time = Utils.timeFunction(new System.Action(() => {
+//                UpdateChunk();
+//            }));
+//            Debug.Log("Time to generate chunk mesh: " + time);
+        } else if (thread != null && thread.Update()) {
+            RenderMesh(thread.meshData);
+            thread = null;
+//            Debug.Log("updateing thread");
+//            RenderMesh(Mesh);
+        }
     }
     
     public Block GetBlock(int x, int y, int z) {
@@ -57,74 +64,22 @@ public class Chunk : MonoBehaviour {
     }
     
     // Updates the chunk based on its contents
-    public void UpdateChunk(MeshFilter filter, MeshCollider coll, bool multithread = false) {
-        if (meshToRender != null) {
-            rendered = true;
-            
-            //            Debug.Log("Building mesh");
-            MeshData meshData = ((MeshObjects)meshToRender).meshData;
-            filter.mesh.Clear();
-            filter.mesh.vertices = meshData.vertices.ToArray();
-            filter.mesh.triangles = meshData.triangles.ToArray();
-            
-            filter.mesh.uv = meshData.uv.ToArray();
-            filter.mesh.RecalculateNormals();
-            
-            coll.sharedMesh = null;
-            Mesh mesh = new Mesh();
-            mesh.vertices = meshData.colVertices.ToArray();
-            mesh.triangles = meshData.colTriangles.ToArray();
-            mesh.RecalculateNormals();
-            
-            coll.sharedMesh = mesh;
-            meshToRender = null;
-        }
-        if (world.multithread) {
-            BackgroundWorker bw = new BackgroundWorker();
-            bw.DoWork += new DoWorkEventHandler(UpdateMeshData);
-            bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(RenderMeshData);
-            MeshObjects meshObjects = new MeshObjects();
-            meshObjects.filter = filter;
-            meshObjects.coll = coll;
-            meshObjects.blocks = blocks;
-            meshObjects.chunk = this;
-            bw.RunWorkerAsync(meshObjects);
-        } else {
-            rendered = true;
-            MeshData meshData = new MeshData();
-            for (int x = 0; x < chunkSize; x++) {
-                for (int y = 0; y < chunkSize; y++) {
-                    for (int z = 0; z < chunkSize; z++) {
-                        //meshData = blocks[x, y, z].Blockdata(this, x, y, z, meshData);
-                    }
-                }
-            }
-            RenderMesh(meshData, filter, coll);
-        }
-    }
-    
-    static void UpdateMeshData(object sender, DoWorkEventArgs e) {
-        MeshObjects meshObjects = (MeshObjects)e.Argument;
-        MeshData meshData = new MeshData();
-        for (int x = 0; x < chunkSize; x++) {
-            for (int y = 0; y < chunkSize; y++) {
-                for (int z = 0; z < chunkSize; z++) {
-                    //meshData = meshObjects.blocks[x, y, z].Blockdata(meshObjects.chunk, x, y, z, meshData);
-                }
-            }
-        }
-        meshObjects.meshData = meshData;
-        e.Result = meshObjects;
-    }
-    
-    static void RenderMeshData(object sender, RunWorkerCompletedEventArgs e) {
-        MeshObjects meshObjects = (MeshObjects)e.Result;
-        meshObjects.chunk.meshToRender = meshObjects;
-    }
+//    public void UpdateChunk() {
+//        rendered = true;
+//        MeshData meshData = new MeshData();
+//        for (int x = 0; x < chunkSize; x++) {
+//            for (int y = 0; y < chunkSize; y++) {
+//                for (int z = 0; z < chunkSize; z++) {
+//                    meshData = blocks[x, y, z].Blockdata(this, x, y, z, meshData);
+//                }
+//            }
+//        }
+//        RenderMesh(meshData);
+//    }
     
     // Sends the calculated mesh information
     // to the mesh and collision components
-    void RenderMesh(MeshData meshData, MeshFilter filter, MeshCollider coll) {
+    public void RenderMesh(MeshData meshData) {
         filter.mesh.Clear();
         filter.mesh.vertices = meshData.vertices.ToArray();
         filter.mesh.triangles = meshData.triangles.ToArray();
@@ -139,6 +94,7 @@ public class Chunk : MonoBehaviour {
         mesh.RecalculateNormals();
         
         coll.sharedMesh = mesh;
+        rendered = true;
     }
     
     public void SetBlocksUnmodified() {
@@ -148,10 +104,6 @@ public class Chunk : MonoBehaviour {
     }
     
     public void SetUpdate(bool state) {
-        chunkObj.update = state;
-    }
-    
-    public ChunkObject GetObj() {
-        return chunkObj;
+        update = state;
     }
 }

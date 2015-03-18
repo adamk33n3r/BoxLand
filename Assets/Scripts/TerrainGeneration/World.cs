@@ -1,10 +1,9 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
 public class World : MonoBehaviour {
     public Dictionary<WorldPos, Chunk> chunks = new Dictionary<WorldPos, Chunk>();
-    private BackgroundThread[] threads;
     
     public GameObject chunkPrefab;
     
@@ -18,15 +17,6 @@ public class World : MonoBehaviour {
 	
     // Update is called once per frame
     void Update() {
-        CheckThreadsForCompletion();
-    }
-
-    private void CheckThreadsForCompletion() {
-        foreach (BackgroundThread thread in threads) {
-            if (thread.isDone) {
-
-            }
-        }
     }
 
     public void CreateChunk(int x, int y, int z) {
@@ -37,34 +27,28 @@ public class World : MonoBehaviour {
             chunkPrefab,
             new Vector3(x, y, z),
             Quaternion.Euler(Vector3.zero)) as GameObject;
-        ChunkObject chunkObject = newChunkObject.GetComponent<ChunkObject>();
-        Chunk newChunk = new Chunk(chunkObject);
+        Chunk newChunk = newChunkObject.GetComponent<Chunk>();
         
         newChunk.pos = worldPos;
         newChunk.world = this;
         
         // Add it to the chunks dict with the pos as key
         chunks.Add(worldPos, newChunk);
-        
-        if (multithread) {
-            //            BackgroundWorker bw = new BackgroundWorker();
-            //            bw.DoWork += new DoWorkEventHandler(MultiThreadedChunkGen.Build);
-            //            bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(AfterChunkGen);
-            //            bw.RunWorkerAsync(newChunk);
-        } else {
-            TerrainGen terrainGen = new TerrainGen();
-            newChunk = terrainGen.ChunkGen(newChunk);
-            newChunk.SetBlocksUnmodified();
-            if (Application.platform != RuntimePlatform.WindowsWebPlayer && Application.platform != RuntimePlatform.OSXWebPlayer && Application.platform != RuntimePlatform.WebGLPlayer)
-                Serialization.Load(newChunk);
-        }
+        TerrainGen terrainGen = new TerrainGen();
+//        System.DateTime before = System.DateTime.Now;
+        newChunk = terrainGen.ChunkGen(newChunk);
+//        System.DateTime after = System.DateTime.Now;
+//        Debug.Log("!!!" + (after - before) + "!!!");
+        newChunk.SetBlocksUnmodified();
+//        if (Application.platform != RuntimePlatform.WindowsWebPlayer && Application.platform != RuntimePlatform.OSXWebPlayer && Application.platform != RuntimePlatform.WebGLPlayer)
+//            Serialization.Load(newChunk);
     }
     
     public void DestroyChunk(int x, int y, int z) {
         Chunk chunk = null;
         if (chunks.TryGetValue(new WorldPos(x, y, z), out chunk)) {
             Serialization.SaveChunk(chunk);
-            Object.Destroy(chunk.GetObj().gameObject);
+//            Object.Destroy(chunk.GetObj().gameObject);
             chunks.Remove(new WorldPos(x, y, z));
         }
     }

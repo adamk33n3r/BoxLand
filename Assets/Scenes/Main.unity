@@ -231,6 +231,10 @@ Prefab:
       propertyPath: maximumY
       value: 85
       objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 9d4133d5d30b644bd87802a347eaccbe, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9d4133d5d30b644bd87802a347eaccbe, type: 2}
   m_IsPrefabParent: 0
@@ -348,6 +352,22 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7082e81baf8d10249b95ebdd279423c1, type: 3}
   m_IsPrefabParent: 0
+--- !u!1 &1675659654
+GameObject:
+  m_PrefabParentObject: {fileID: 100002, guid: 9d4133d5d30b644bd87802a347eaccbe, type: 2}
+  m_PrefabInternal: {fileID: 633030695}
+--- !u!114 &1675659660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1675659654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01259b56d44a5a348946de55995c3047, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  world: {fileID: 2125677748}
 --- !u!1 &2125677745
 GameObject:
   m_ObjectHideFlags: 0
@@ -356,6 +376,8 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 2125677747}
+  - 114: {fileID: 2125677746}
+  - 114: {fileID: 2125677748}
   m_Layer: 0
   m_Name: World
   m_TagString: Untagged
@@ -363,6 +385,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &2125677746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2125677745}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c502c3d5f6d4718409a91bfeca8277ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  threadCount: 10
 --- !u!4 &2125677747
 Transform:
   m_ObjectHideFlags: 0
@@ -375,3 +409,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
+--- !u!114 &2125677748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2125677745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f421d47922064d14ca6a4e22ee975ff7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chunkPrefab: {fileID: 100000, guid: dcd5e641c09608b48bbb8e4988a4f80b, type: 2}
+  worldName: world
+  multithread: 1

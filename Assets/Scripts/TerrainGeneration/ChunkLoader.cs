@@ -11,15 +11,63 @@ public class ChunkLoader : MonoBehaviour {
     List<WorldPos> updateList = new List<WorldPos>();
     List<WorldPos> buildList = new List<WorldPos>();
 
-    static  WorldPos[] chunkPositions = {
+    static WorldPos[] chunkPositions1 = {
         new WorldPos(0, 0, 0)
     };
 
+    static WorldPos[] chunkPositions2 = {
+        new WorldPos(0, 0, 0),new WorldPos(-1, 0, 0), new WorldPos(0, 0, -1), new WorldPos(0, 0, 1), new WorldPos(1, 0, 0),
+        new WorldPos(-1, 0, -1), new WorldPos(-1, 0, 1), new WorldPos(1, 0, -1), new WorldPos(1, 0, 1)
+    };
+
+    static WorldPos[] chunkPositions3 = {
+        new WorldPos(0, 0, 0), new WorldPos(-1, 0, 0), new WorldPos(0, 0, -1), new WorldPos(0, 0, 1), new WorldPos(1, 0, 0),
+        new WorldPos(-1, 0, -1), new WorldPos(-1, 0, 1), new WorldPos(1, 0, -1), new WorldPos(1, 0, 1), new WorldPos(-2, 0, 0),
+        new WorldPos(0, 0, -2), new WorldPos(0, 0, 2), new WorldPos(2, 0, 0), new WorldPos(-2, 0, -1), new WorldPos(-2, 0, 1),
+        new WorldPos(-1, 0, -2), new WorldPos(-1, 0, 2), new WorldPos(1, 0, -2), new WorldPos(1, 0, 2), new WorldPos(2, 0, -1),
+        new WorldPos(2, 0, 1), new WorldPos(-2, 0, -2), new WorldPos(-2, 0, 2), new WorldPos(2, 0, -2), new WorldPos(2, 0, 2),
+        new WorldPos(-3, 0, 0), new WorldPos(0, 0, -3), new WorldPos(0, 0, 3), new WorldPos(3, 0, 0), new WorldPos(-3, 0, -1),
+        new WorldPos(-3, 0, 1), new WorldPos(-1, 0, -3), new WorldPos(-1, 0, 3), new WorldPos(1, 0, -3), new WorldPos(1, 0, 3),
+        new WorldPos(3, 0, -1), new WorldPos(3, 0, 1), new WorldPos(-3, 0, -2), new WorldPos(-3, 0, 2), new WorldPos(-2, 0, -3),
+        new WorldPos(-2, 0, 3), new WorldPos(2, 0, -3), new WorldPos(2, 0, 3), new WorldPos(3, 0, -2), new WorldPos(3, 0, 2),
+        new WorldPos(-4, 0, 0), new WorldPos(0, 0, -4), new WorldPos(0, 0, 4), new WorldPos(4, 0, 0), new WorldPos(-4, 0, -1),
+        new WorldPos(-4, 0, 1), new WorldPos(-1, 0, -4), new WorldPos(-1, 0, 4), new WorldPos(1, 0, -4), new WorldPos(1, 0, 4),
+        new WorldPos(4, 0, -1), new WorldPos(4, 0, 1), new WorldPos(-3, 0, -3), new WorldPos(-3, 0, 3), new WorldPos(3, 0, -3),
+        new WorldPos(3, 0, 3), new WorldPos(-4, 0, -2), new WorldPos(-4, 0, 2), new WorldPos(-2, 0, -4), new WorldPos(-2, 0, 4),
+        new WorldPos(2, 0, -4), new WorldPos(2, 0, 4), new WorldPos(4, 0, -2), new WorldPos(4, 0, 2), new WorldPos(-5, 0, 0),
+        new WorldPos(-4, 0, -3), new WorldPos(-4, 0, 3), new WorldPos(-3, 0, -4), new WorldPos(-3, 0, 4), new WorldPos(0, 0, -5),
+        new WorldPos(0, 0, 5), new WorldPos(3, 0, -4), new WorldPos(3, 0, 4), new WorldPos(4, 0, -3), new WorldPos(4, 0, 3),
+        new WorldPos(5, 0, 0), new WorldPos(-5, 0, -1), new WorldPos(-5, 0, 1), new WorldPos(-1, 0, -5), new WorldPos(-1, 0, 5),
+        new WorldPos(1, 0, -5), new WorldPos(1, 0, 5), new WorldPos(5, 0, -1), new WorldPos(5, 0, 1), new WorldPos(-5, 0, -2),
+        new WorldPos(-5, 0, 2), new WorldPos(-2, 0, -5), new WorldPos(-2, 0, 5), new WorldPos(2, 0, -5), new WorldPos(2, 0, 5),
+        new WorldPos(5, 0, -2), new WorldPos(5, 0, 2), new WorldPos(-4, 0, -4), new WorldPos(-4, 0, 4), new WorldPos(4, 0, -4),
+        new WorldPos(4, 0, 4), new WorldPos(-5, 0, -3), new WorldPos(-5, 0, 3), new WorldPos(-3, 0, -5), new WorldPos(-3, 0, 5),
+        new WorldPos(3, 0, -5), new WorldPos(3, 0, 5), new WorldPos(5, 0, -3), new WorldPos(5, 0, 3), new WorldPos(-6, 0, 0),
+        new WorldPos(0, 0, -6), new WorldPos(0, 0, 6), new WorldPos(6, 0, 0), new WorldPos(-6, 0, -1), new WorldPos(-6, 0, 1),
+        new WorldPos(-1, 0, -6), new WorldPos(-1, 0, 6), new WorldPos(1, 0, -6), new WorldPos(1, 0, 6), new WorldPos(6, 0, -1),
+        new WorldPos(6, 0, 1), new WorldPos(-6, 0, -2), new WorldPos(-6, 0, 2), new WorldPos(-2, 0, -6), new WorldPos(-2, 0, 6),
+        new WorldPos(2, 0, -6), new WorldPos(2, 0, 6), new WorldPos(6, 0, -2), new WorldPos(6, 0, 2), new WorldPos(-5, 0, -4),
+        new WorldPos(-5, 0, 4), new WorldPos(-4, 0, -5), new WorldPos(-4, 0, 5), new WorldPos(4, 0, -5), new WorldPos(4, 0, 5),
+        new WorldPos(5, 0, -4), new WorldPos(5, 0, 4), new WorldPos(-6, 0, -3), new WorldPos(-6, 0, 3), new WorldPos(-3, 0, -6),
+        new WorldPos(-3, 0, 6), new WorldPos(3, 0, -6), new WorldPos(3, 0, 6), new WorldPos(6, 0, -3), new WorldPos(6, 0, 3),
+        new WorldPos(-7, 0, 0), new WorldPos(0, 0, -7), new WorldPos(0, 0, 7), new WorldPos(7, 0, 0), new WorldPos(-7, 0, -1),
+        new WorldPos(-7, 0, 1), new WorldPos(-5, 0, -5), new WorldPos(-5, 0, 5), new WorldPos(-1, 0, -7), new WorldPos(-1, 0, 7),
+        new WorldPos(1, 0, -7), new WorldPos(1, 0, 7), new WorldPos(5, 0, -5), new WorldPos(5, 0, 5), new WorldPos(7, 0, -1),
+        new WorldPos(7, 0, 1), new WorldPos(-6, 0, -4), new WorldPos(-6, 0, 4), new WorldPos(-4, 0, -6), new WorldPos(-4, 0, 6),
+        new WorldPos(4, 0, -6), new WorldPos(4, 0, 6), new WorldPos(6, 0, -4), new WorldPos(6, 0, 4), new WorldPos(-7, 0, -2),
+        new WorldPos(-7, 0, 2), new WorldPos(-2, 0, -7), new WorldPos(-2, 0, 7), new WorldPos(2, 0, -7), new WorldPos(2, 0, 7),
+        new WorldPos(7, 0, -2), new WorldPos(7, 0, 2), new WorldPos(-7, 0, -3), new WorldPos(-7, 0, 3), new WorldPos(-3, 0, -7),
+        new WorldPos(-3, 0, 7), new WorldPos(3, 0, -7), new WorldPos(3, 0, 7), new WorldPos(7, 0, -3), new WorldPos(7, 0, 3),
+        new WorldPos(-6, 0, -5), new WorldPos(-6, 0, 5), new WorldPos(-5, 0, -6), new WorldPos(-5, 0, 6), new WorldPos(5, 0, -6),
+        new WorldPos(5, 0, 6), new WorldPos(6, 0, -5), new WorldPos(6, 0, 5) };
+
+    static WorldPos[] chunkPositions = chunkPositions3;
+    
     // Use this for initialization
     void Start() {
-	
+        
     }
-	
+    
     void Update() {
         DeleteChunks();
         FindChunksToLoad();
@@ -55,34 +103,27 @@ public class ChunkLoader : MonoBehaviour {
                     continue;
                 
                 //load a column of chunks in this position
-                for (int y = 0; y < 3; y++) {
+                for (int y = 0; y < 4; y++) {
                     buildList.Add(new WorldPos(
                         newChunkPos.x,
                         y * Chunk.chunkSize,
                         newChunkPos.z));
                 }
-//                return; //What is this doing here?
+                return; // So it only adds one column of chunks at a time.
             }
         }
     }
     
     void BuildChunk(WorldPos pos) {
+        // Build chunk and neighbors so we can decide which faces to render
         for (int y = pos.y - Chunk.chunkSize; y <= pos.y + Chunk.chunkSize; y += Chunk.chunkSize) {
             if (y > 64 || y < -64)
-                continue;
-            if (y != 0)
                 continue;
             
             for (int x = pos.x - Chunk.chunkSize; x <= pos.x + Chunk.chunkSize; x += Chunk.chunkSize) {
                 for (int z = pos.z - Chunk.chunkSize; z <= pos.z + Chunk.chunkSize; z += Chunk.chunkSize) {
-                    
-                    if (y < 0) {
-                        if (world.GetChunk(x, -16, z) == null)
-                            world.CreateChunk(x, -16, z);
-                    } else {
-                        if (world.GetChunk(x, y, z) == null)
-                            world.CreateChunk(x, y, z);
-                    }
+                    if (world.GetChunk(x, y, z) == null)
+                        world.CreateChunk(x, y, z);
                 }
             }
         }
@@ -102,8 +143,8 @@ public class ChunkLoader : MonoBehaviour {
             Chunk chunk = world.GetChunk(updateList[0].x, updateList[0].y, updateList[0].z);
             if (chunk != null)
                 chunk.SetUpdate(true);
-            else
-                Debug.Log("loop update" + updateList.Count);
+//            else
+//                Debug.Log("loop update" + updateList.Count);
             updateList.RemoveAt(0);
         }
     }
