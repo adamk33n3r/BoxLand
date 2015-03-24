@@ -87,6 +87,18 @@ public class Chunk : MonoBehaviour {
         filter.mesh.uv = meshData.uv.ToArray();
         filter.mesh.RecalculateNormals();
         
+        Color[] colors = new Color[meshData.vertices.Count];
+        for (int i = 0; i < meshData.vertices.Count; i++) {
+            float y = meshData.vertices[i].y + pos.y;
+            if (y <= 0)
+                colors[i] = Utils.Colors.water;
+            else if (y <= 3)
+                colors[i] = Utils.Colors.sand;
+            else
+                colors[i] = Color.Lerp(Utils.Colors.green, Utils.Colors.mountainGreen, y / World.maxHeight);
+        }
+        filter.mesh.colors = colors;
+        
         coll.sharedMesh = null;
         Mesh mesh = new Mesh();
         mesh.vertices = meshData.colVertices.ToArray();

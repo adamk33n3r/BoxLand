@@ -4,54 +4,58 @@ using SimplexNoise;
 
 public class TerrainGen {
 
-    float stoneBaseHeight = 0;              // Where to start
-    float stoneBaseNoise = 0.05f;           // Has to do with distance between peaks. .05 == 25 blocks
-    float stoneBaseNoiseHeight = 4;         // Difference between peak and valley
-    
-    float stoneMountainHeight = 48;
-    float stoneMountainFrequency = 0.008f;
-    float stoneMinHeight = 0;             // The lowest stone is allowed to go.
-    
-    float dirtBaseHeight = 1;               // Minimum depth on top of rock
-    float dirtNoise = 0.04f;
-    float dirtNoiseHeight = 9;
+    private float peakDistance = .01f;
+    private static Perlin perlin = new Perlin();
 
-    public Chunk ChunkGen(Chunk chunk) {
+    public TerrainGen(int seed) {
+//        Random.seed = seed;
+//        shuffle(Noise.perm);
+    }
+
+    private void shuffle(byte[] perm) {
+        for (int t = 0; t < perm.Length / 2; t++) {
+            byte tmp = perm[t];
+            int r = Random.Range(t, perm.Length / 2);
+            perm[t] = perm[r];
+            perm[t + 256] = perm[r + 256];
+            perm[r] = tmp;
+            perm[r + 256] = tmp;
+        }
+    }
+
+    public virtual Chunk ChunkGen(Chunk chunk) {
         for (int x = chunk.pos.x; x < chunk.pos.x + Chunk.chunkSize; x++) {
             for (int z = chunk.pos.z; z < chunk.pos.z + Chunk.chunkSize; z++) {
-                chunk = ChunkColumnGen(chunk, x, z);
+                ChunkColumnGen(chunk, x, z);
             }
         }
         return chunk;
     }
-    
-    public virtual Chunk ChunkColumnGen(Chunk chunk, int x, int z) {
-        int stoneHeight = Mathf.FloorToInt(stoneBaseHeight);
-        stoneHeight += GetNoise(x, 0, z, stoneMountainFrequency, Mathf.FloorToInt(stoneMountainHeight));
-        
-        if (stoneHeight < stoneMinHeight)
-            stoneHeight = Mathf.FloorToInt(stoneMinHeight);
-        
-        stoneHeight += GetNoise(x, 0, z, stoneBaseNoise, Mathf.FloorToInt(stoneBaseNoiseHeight));
-        
-        int dirtHeight = stoneHeight + Mathf.FloorToInt(dirtBaseHeight);
-        dirtHeight += GetNoise(x, 100, z, dirtNoise, Mathf.FloorToInt(dirtNoiseHeight));
-        
+    int print = 0;
+    public virtual void ChunkColumnGen(Chunk chunk, int x, int z) {
+//        height += GetNoise(x, 0, z, peakDistance, maxHeight);
         for (int y = chunk.pos.y; y < chunk.pos.y + Chunk.chunkSize; y++) {
-            if (y <= stoneHeight) {
-                chunk.SetBlock(x - chunk.pos.x, y - chunk.pos.y, z - chunk.pos.z, new Block());
-            } else if (y <= dirtHeight) {
-                chunk.SetBlock(x - chunk.pos.x, y - chunk.pos.y, z - chunk.pos.z, new BlockGrass());
+            double height = GetNoise(x, y, z, peakDistance, World.maxHeight) + y;
+//            height += GetNoise(x, y, z, .05f, World.maxHeight) + y;
+//            height /= 2;
+            if (height < 1 && height > -1 && print < 10) {
+                Debug.Log(height);
+                print++;
+            }
+            if (height > 0) {
+                if (y < 0)
+                    chunk.SetBlock(x - chunk.pos.x, y - chunk.pos.y, z - chunk.pos.z, new BlockGrass());
+                else
+                    chunk.SetBlock(x - chunk.pos.x, y - chunk.pos.y, z - chunk.pos.z, new BlockAir());
             } else {
-                chunk.SetBlock(x - chunk.pos.x, y - chunk.pos.y, z - chunk.pos.z, new BlockAir());
+                chunk.SetBlock(x - chunk.pos.x, y - chunk.pos.y, z - chunk.pos.z, new Block());
             }
             
         }
-        
-        return chunk;
     }
     
-    public static int GetNoise(int x, int y, int z, float scale, int max) {
-        return Mathf.FloorToInt((Noise.Generate(x * scale, y * scale, z * scale) + 1f) * (max / 2f));
+    public static float GetNoise(int x, int y, int z, float scale, int max) {
+//        return Mathf.FloorToInt((float)(perlin.perlin(x * scale, y * scale, z * scale)));
+        return (Noise.Generate(x * scale, y * scale * 2, z * scale) - .5f) * (max / 2f);
     }
 }

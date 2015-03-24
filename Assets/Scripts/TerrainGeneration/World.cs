@@ -10,13 +10,19 @@ public class World : MonoBehaviour {
     public string worldName = "world";
     public bool multithread = true;
 
+    public int noOfChunks = 0;
+    public static int maxHeight = 64;
+    private TerrainGen terrainGen;
+
     // Use this for initialization
     void Start() {
-	    
+        Debug.Log("starting...");
+        terrainGen = new TerrainGen(0);
     }
 	
     // Update is called once per frame
     void Update() {
+        noOfChunks = chunks.Keys.Count;
     }
 
     public void CreateChunk(int x, int y, int z) {
@@ -32,11 +38,17 @@ public class World : MonoBehaviour {
         newChunk.pos = worldPos;
         newChunk.world = this;
         
-        // Add it to the chunks dict with the pos as key
-        chunks.Add(worldPos, newChunk);
-        TerrainGen terrainGen = new TerrainGen();
+
 //        System.DateTime before = System.DateTime.Now;
         newChunk = terrainGen.ChunkGen(newChunk);
+//        if (newChunk == null)
+//            Destroy(newChunk);
+//        else {
+//            if (newChunk.pos.y != 0)
+//                Debug.Log(newChunk.pos);
+        // Add it to the chunks dict with the pos as key
+        chunks.Add(worldPos, newChunk);
+//        }
 //        System.DateTime after = System.DateTime.Now;
 //        Debug.Log("!!!" + (after - before) + "!!!");
         newChunk.SetBlocksUnmodified();
@@ -48,7 +60,7 @@ public class World : MonoBehaviour {
         Chunk chunk = null;
         if (chunks.TryGetValue(new WorldPos(x, y, z), out chunk)) {
             Serialization.SaveChunk(chunk);
-//            Object.Destroy(chunk.GetObj().gameObject);
+            Object.Destroy(chunk.gameObject);
             chunks.Remove(new WorldPos(x, y, z));
         }
     }

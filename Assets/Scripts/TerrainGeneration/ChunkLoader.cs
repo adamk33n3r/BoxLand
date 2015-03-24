@@ -103,7 +103,7 @@ public class ChunkLoader : MonoBehaviour {
                     continue;
                 
                 //load a column of chunks in this position
-                for (int y = 0; y < 4; y++) {
+                for (int y = -2; y < World.maxHeight / Chunk.chunkSize; y++) {
                     buildList.Add(new WorldPos(
                         newChunkPos.x,
                         y * Chunk.chunkSize,
@@ -117,9 +117,6 @@ public class ChunkLoader : MonoBehaviour {
     void BuildChunk(WorldPos pos) {
         // Build chunk and neighbors so we can decide which faces to render
         for (int y = pos.y - Chunk.chunkSize; y <= pos.y + Chunk.chunkSize; y += Chunk.chunkSize) {
-            if (y > 64 || y < -64)
-                continue;
-            
             for (int x = pos.x - Chunk.chunkSize; x <= pos.x + Chunk.chunkSize; x += Chunk.chunkSize) {
                 for (int z = pos.z - Chunk.chunkSize; z <= pos.z + Chunk.chunkSize; z += Chunk.chunkSize) {
                     if (world.GetChunk(x, y, z) == null)
